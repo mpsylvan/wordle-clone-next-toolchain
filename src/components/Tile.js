@@ -14,20 +14,22 @@ export const Tile = ({ guessData, dataIndex, guessIndex, activeTileRow }) => {
   const [currentTile, setCurrentTile] = useState(false);
 
   useEffect(() => {
-    if (dataIndex > guessIndex) {
-      setRenderData("");
-      setCurrentTile(false);
+    if (activeTileRow) {
+      if (dataIndex > guessIndex) {
+        setRenderData("");
+        setCurrentTile(false);
+      }
+      if (dataIndex === guessIndex + 1) {
+        setCurrentTile(true);
+      }
+      if (dataIndex === guessIndex) {
+        setRenderData(guessData);
+      }
+      if (dataIndex <= guessIndex) {
+        setCurrentTile(false);
+      }
     }
-    if (dataIndex === guessIndex + 1) {
-      setCurrentTile(true);
-    }
-    if (dataIndex === guessIndex) {
-      setRenderData(guessData);
-    }
-    if (dataIndex <= guessIndex) {
-      setCurrentTile(false);
-    }
-  }, [guessIndex]);
+  }, [activeTileRow, guessIndex, guessData]);
 
   return (
     <div
@@ -35,7 +37,7 @@ export const Tile = ({ guessData, dataIndex, guessIndex, activeTileRow }) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: "10px",
+        borderRadius: "5px",
         background: activeTileRow ? "#000" : "#181918",
         color: "#eee",
         height: "54px",

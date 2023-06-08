@@ -19,12 +19,12 @@ export const Gameboard = () => {
   const keyDownHandler = (e) => {
     inputVal = "";
     inputVal = e.code.replace("Key", "");
+    setGuessLetter(inputVal);
     if (alphabet.includes(inputVal)) {
       if (localGuessArray.length <= 4) {
         setGuessLetter(inputVal);
         localGuessArray.push(inputVal);
         setGuessArray(localGuessArray);
-        localRowIndex++;
         setRowIndex(localRowIndex);
       } else {
         setGuessLetter(inputVal);
@@ -32,12 +32,22 @@ export const Gameboard = () => {
       }
     }
     if (inputVal === "Backspace") {
-      if (localRowIndex > 0) {
+      if (localRowIndex > -1) {
         localGuessArray.pop();
-        localRowIndex--;
-        setRowIndex(localRowIndex);
         setGuessArray(localGuessArray);
         setGuessLetter(localGuessArray[localGuessArray.length - 1]);
+      }
+    }
+    if (inputVal === "Enter") {
+      if (localGuessArray.length === 5) {
+        if (localGuessArray.join("") === SOLUTION.join("")) {
+          setSolved(true);
+        }
+        localRowIndex++;
+        setRowIndex(localRowIndex);
+        localGuessArray = [];
+        setGuessArray(localGuessArray);
+        setGuessLetter("");
       }
     }
   };
@@ -47,22 +57,28 @@ export const Gameboard = () => {
   }, []);
 
   return (
-    <div
-      className="game-board"
-      style={{
-        display: "flex",
-        height: "500px",
-        width: "500px",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <TileBoard
-        guessData={guessLetter}
-        guessIndex={guessArray.length}
-        rowIndex={rowIndex}
-      />
-      <KeyboardModule guessData={guessLetter} />;
-    </div>
+    <>
+      {solved ? (
+        <div>solved</div>
+      ) : (
+        <div
+          className="game-board"
+          style={{
+            display: "flex",
+            height: "500px",
+            width: "500px",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <TileBoard
+            guessData={guessLetter}
+            guessIndex={guessArray.length}
+            rowIndex={rowIndex}
+          />
+          <KeyboardModule guessData={guessLetter} />;
+        </div>
+      )}
+    </>
   );
 };

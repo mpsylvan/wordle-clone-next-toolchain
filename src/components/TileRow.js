@@ -2,6 +2,8 @@ import React from "react";
 import { Tile } from "./Tile";
 
 export const TileRow = ({ guessData, guessIndex, rowIndex, dataKey }) => {
+  const currentRow = rowIndex === dataKey;
+
   return (
     <div
       className="tile-row"
