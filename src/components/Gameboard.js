@@ -58,27 +58,25 @@ export const Gameboard = () => {
 
   return (
     <>
-      {solved ? (
-        <div>solved</div>
-      ) : (
-        <div
-          className="game-board"
-          style={{
-            display: "flex",
-            height: "500px",
-            width: "500px",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <TileBoard
-            guessData={guessLetter}
-            guessIndex={guessArray.length}
-            rowIndex={rowIndex}
-          />
-          <KeyboardModule guessData={guessLetter} />;
-        </div>
-      )}
+      <div
+        className="game-board"
+        style={{
+          display: "flex",
+          height: "500px",
+          width: "500px",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <TileBoard
+          guessData={guessLetter}
+          guessIndex={guessArray.length}
+          guessArray={guessArray}
+          rowIndex={rowIndex}
+          solution={SOLUTION}
+        />
+        <KeyboardModule guessData={guessLetter} />;
+      </div>
     </>
   );
 };

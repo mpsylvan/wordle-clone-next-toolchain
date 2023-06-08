@@ -9,42 +9,65 @@ import React, { useEffect, useState } from "react";
  *
  * */
 
-export const Tile = ({ guessData, dataIndex, guessIndex, activeTileRow }) => {
+export const Tile = ({
+  guessData,
+  dataIndex,
+  guessIndex,
+  activeTileRow,
+  solution,
+  rowIndex,
+  dataKey,
+}) => {
   const [renderData, setRenderData] = useState("");
-  const [currentTile, setCurrentTile] = useState(false);
+  const [presentInSolution, setPresentInSolution] = useState(false);
+  const [correctPosition, setCorrectPosition] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [tileType, setTileType] = useState("tile");
 
   useEffect(() => {
-    if (activeTileRow) {
+    if (dataKey === rowIndex) {
       if (dataIndex > guessIndex) {
         setRenderData("");
-        setCurrentTile(false);
+        setTileType("tile");
       }
       if (dataIndex === guessIndex + 1) {
-        setCurrentTile(true);
+        setTileType("tile-current");
       }
       if (dataIndex === guessIndex) {
         setRenderData(guessData);
+        setTileType("tile");
       }
       if (dataIndex <= guessIndex) {
-        setCurrentTile(false);
+        setTileType("tile");
       }
     }
-  }, [activeTileRow, guessIndex, guessData]);
+    if (dataKey < rowIndex) {
+      setCorrectPosition(solution[dataIndex - 1] === renderData);
+      setPresentInSolution(solution.includes(renderData));
+      if (presentInSolution) {
+        setTileType("tile-submitted-present");
+      }
+      if (correctPosition) {
+        setTileType("tile-submitted-correct");
+      }
+    }
+  }, [guessIndex, guessData, rowIndex]);
 
   return (
     <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: "5px",
-        background: activeTileRow ? "#000" : "#181918",
-        color: "#eee",
-        height: "54px",
-        width: "54px",
-        margin: "px",
-        border: currentTile ? "2px solid #bbb" : "2px solid #777",
-      }}
+      className={tileType}
+      // style={{
+      //   display: "flex",
+      //   justifyContent: "center",
+      //   alignItems: "center",
+      //   borderRadius: "5px",
+      //   background: activeTileRow ? "#000" : "#181918",
+      //   color: correctPosition ? "#ce2" : "#eee",
+      //   height: "54px",
+      //   width: "54px",
+      //   margin: "px",
+      //   border: currentTile ? "2px solid #bbb" : "2px solid #777",
+      // }}
     >
       <h4 className="fw-bold">{renderData}</h4>
     </div>
